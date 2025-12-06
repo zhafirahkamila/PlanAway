@@ -31,12 +31,11 @@ struct GroqService {
             let type: String
         }
 
-        // Model untuk API Groq
         struct GroqChatResponse: Codable {
             struct Choice: Codable {
                 struct Message: Codable {
                     let role: String
-                    let content: String   // JSON string
+                    let content: String
                 }
                 let message: Message
             }
@@ -44,24 +43,25 @@ struct GroqService {
         }
 
         let systemPrompt = """
-        Kamu adalah AI travel planner.
-        Tolong berikan itinerary dalam format JSON dengan struktur:
+        You are an AI travel planner.
+
+        Always return the itinerary strictly in JSON format:
 
         {
           "itinerary": [
             {
               "day": 1,
               "activities": [
-                { "location": "Bandara - Kabupaten Probolinggo", "budget": 150000 }
+                { "location": "Airport to Probolinggo", "budget": 150000 }
               ]
             }
           ]
         }
 
-        Jangan memberikan penjelasan lain di luar JSON.
+        Do NOT include explanations or text outside of JSON.
         """
 
-        let finalPrompt = "Buatkan itinerary berdasarkan permintaan ini: \(prompt)"
+        let finalPrompt = "Generate an itinerary based on this request: \(prompt)"
 
         let body = Body(
             model: "llama-3.1-8b-instant",
@@ -76,18 +76,14 @@ struct GroqService {
 
         let (data, _) = try await URLSession.shared.data(for: request)
 
-        // STEP 1: decode hasil Groq
         let groqResponse = try JSONDecoder().decode(GroqChatResponse.self, from: data)
 
-        // STEP 2: ambil JSON murni
         let jsonString = groqResponse.choices.first?.message.content ?? "{}"
 
-        // STEP 3: convert ke Data
         guard let jsonData = jsonString.data(using: .utf8) else {
             throw NSError(domain: "Invalid JSON String", code: 0)
         }
 
-        // STEP 4: decode ke ItineraryResponse
         return try JSONDecoder().decode(Itinerary.self, from: jsonData)
     }
 }
