@@ -10,19 +10,22 @@ import SwiftUI
 struct TabItem: View {
     var tint: Color
     var inactiveTint: Color
-    var tab: Tab
+    var tab: AppTab
     var animation: Namespace.ID
-    @Binding var activeTab: Tab
+    
+    @Binding var activeTab: AppTab
     @Binding var position: CGPoint
     
     @State private var tabPosition: CGPoint = .zero
     
     var body: some View {
         VStack(spacing: 6) {
-            Image(systemName: tab.systemImage)
+
+            Image(systemName: tab.icon)  // ⬅ icon pakai enum
                 .font(.title2)
                 .foregroundColor(activeTab == tab ? .white : inactiveTint)
-                .frame(width: activeTab == tab ? 58 : 35, height: activeTab == tab ? 58 : 35)
+                .frame(width: activeTab == tab ? 58 : 35,
+                       height: activeTab == tab ? 58 : 35)
                 .background {
                     if activeTab == tab {
                         Circle()
@@ -30,8 +33,8 @@ struct TabItem: View {
                             .matchedGeometryEffect(id: "ACTIVETAB", in: animation)
                     }
                 }
-            
-            Text(tab.rawValue)
+
+            Text(tab.label) // ⬅ text pakai label enum
                 .font(.caption)
                 .foregroundColor(activeTab == tab ? tint : .gray)
         }

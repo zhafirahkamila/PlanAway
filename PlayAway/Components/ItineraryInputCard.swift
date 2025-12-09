@@ -20,16 +20,16 @@ struct ItineraryInputCard: View {
         VStack(spacing: 30) {
 
             VStack(alignment: .leading, spacing: 10) {
-                Text("To")
+                Text("To").font(.custom("Poppins-Regular", size: 13))
                 HStack {
                     Image(systemName: "airplane")
-                    TextField("Destination", text: $destination)
+                    TextField("Destination", text: $destination).font(.custom("Poppins-Regular", size: 14))
                 }
                 Divider()
             }
 
             VStack(alignment: .leading, spacing: 10) {
-                Text("Date")
+                Text("Date").font(.custom("Poppins-Medium", size: 13))
                 HStack(spacing: 8) {
                     Image(systemName: "calendar")
                     DatePicker("", selection: $startDate, displayedComponents: .date).labelsHidden()
@@ -39,19 +39,20 @@ struct ItineraryInputCard: View {
             }
 
             VStack(alignment: .leading, spacing: 10) {
-                Text("Budget")
+                Text("Budget").font(.custom("Poppins-Medium", size: 13))
                 HStack {
                     Image(systemName: "creditcard")
-                    TextField("Budget", text: $budget)
+                    TextField("Budget", text: $budget).font(.custom("Poppins-Regular", size: 14))
                 }
                 Divider()
             }
             
             Button(action: onGenerate) {
                 Text(isLoading ? "Generating..." : "Generate Itinerary")
+                    .font(.custom("Poppins-Medium", size: 16))
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(Color("blue"))
                     .foregroundColor(.white)
                     .cornerRadius(12)
                 }

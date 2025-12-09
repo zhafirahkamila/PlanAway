@@ -8,51 +8,62 @@
 import SwiftUI
 
 struct ItineraryCard: View {
-    let dayPlan: DayPlan
+    let day: Int
+    let activity: Activity
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        HStack(alignment: .center, spacing: 16) {
 
-            HStack(alignment: .top) {
-                // DAY LABEL
-                Text("Day \(dayPlan.day)")
-                    .font(.headline)
-                    .foregroundColor(.black)
+            // LEFT: Day
+            Text("Day \(day)")
+                .font(.custom("Poppins-SemiBold", size: 14))
+                .foregroundColor(.black)
+                .frame(width: 70, alignment: .leading)
 
-                Divider()
-                    .frame(height: 40)
-                    .background(Color.gray.opacity(0.4))
+            // Vertical dashed divider
+            Rectangle()
+                .fill(.clear)
+                .frame(width: 1)
+                .overlay(
+                    Rectangle()
+                        .stroke(style: StrokeStyle(lineWidth: 1, dash: [3, 4]))
+                        .foregroundColor(Color.blue.opacity(0.4))
+                )
+                .frame(height: 50)
 
-                VStack(alignment: .leading, spacing: 10) {
+            // RIGHT CONTENT
+            VStack(alignment: .leading, spacing: 10) {
 
-                    ForEach(dayPlan.activities) { activity in
-                        HStack(spacing: 8) {
-                            Image(systemName: "mappin.and.ellipse")
-                                .foregroundColor(.blue)
-                                .font(.system(size: 12))
+                // Location row
+                HStack(spacing: 6) {
+                    Image(systemName: "mappin.and.ellipse")
+                        .font(.system(size: 13))
+                        .foregroundColor(Color("darkBlue"))
 
-                            Text(activity.location)
-                                .font(.subheadline)
-                                .foregroundColor(.blue)
+                    Text(activity.location)
+                        .font(.custom("Poppins-Regular", size: 12))
+                        .foregroundColor(Color("darkBlue"))
+                }
 
-                            Spacer()
+                // Budget row
+                HStack(spacing: 6) {
+                    Image(systemName: "creditcard")
+                        .font(.system(size: 13))
+                        .foregroundColor(Color("darkBlue"))
 
-                            Image(systemName: "creditcard")
-                                .foregroundColor(.blue)
-                                .font(.system(size: 12))
-
-                            Text(formatCurrency(activity.budget))
-                                .font(.subheadline)
-                                .foregroundColor(.blue)
-                        }
-                    }
+                    Text(formatCurrency(activity.budget))
+                        .font(.custom("Poppins-Regular", size: 12))
+                        .foregroundColor(Color("darkBlue"))
                 }
             }
+
+            Spacer()
         }
-        .padding()
-        .background(Color(red: 1, green: 0.98, blue: 0.96))
-        .cornerRadius(12)
-        .shadow(radius: 1, y: 1)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 18)
+        .background(Color("bgCard2"))
+        .cornerRadius(20)
+        .shadow(color: .black.opacity(0.05), radius: 4, y: 2)
     }
 
     func formatCurrency(_ amount: Int) -> String {
@@ -60,33 +71,5 @@ struct ItineraryCard: View {
         formatter.numberStyle = .decimal
         formatter.groupingSeparator = "."
         return formatter.string(from: NSNumber(value: amount)) ?? "\(amount)"
-    }
-}
-
-struct ItineraryResultView: View {
-    let text: String   // raw JSON text
-
-    var body: some View {
-        ScrollView {
-            Text(prettyPrinted(jsonString: text))
-                .font(.system(.body, design: .monospaced))
-                .padding()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color(white: 0.96))
-                .cornerRadius(12)
-        }
-        .frame(maxHeight: 300)
-    }
-
-    func prettyPrinted(jsonString: String) -> String {
-        guard
-            let data = jsonString.data(using: .utf8),
-            let object = try? JSONSerialization.jsonObject(with: data),
-            let pretty = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted])
-        else {
-            return text  // return raw if parsing fails
-        }
-
-        return String(decoding: pretty, as: UTF8.self)
     }
 }

@@ -11,6 +11,7 @@ struct DestinationHorCard: View {
     let data: Destination
     var showItineraryBtn: Bool = true
     var showLike: Bool = true
+    var onAddItinerary: (() -> Void)? = nil
     
     var noButtons: Bool { !showItineraryBtn && !showLike }
     
@@ -23,7 +24,6 @@ struct DestinationHorCard: View {
                 .clipShape(RoundedRectangle(cornerRadius: 16))
             
             VStack(alignment: .leading, spacing: noButtons ? 2 : 4) {
-                
                 if noButtons { Spacer(minLength: 0) }
                 
                 Text(data.name)
@@ -47,19 +47,20 @@ struct DestinationHorCard: View {
                         .font(.custom("Poppins-SemiBold", size: 12))
                         .foregroundStyle(Color("blue"))
                 }
-                // Jarak ke bawah rating berubah tergantung kondisi tombol
                 .padding(.top, noButtons ? 2 : 6)
                 
                 if !noButtons {
                     HStack(spacing: 10) {
                         if showItineraryBtn {
-                            Button {} label: {
+                            Button {
+                                onAddItinerary?()
+                            } label: {
                                 Text("Add Itinerary")
                                     .font(.custom("Poppins-Medium", size: 12))
                                     .padding(.vertical, 10)
                                     .padding(.horizontal, 14)
                                     .background(Color("blue"))
-                                    .foregroundStyle(.white)
+                                    .foregroundColor(.white)
                                     .clipShape(Capsule())
                             }
                         }
@@ -77,8 +78,9 @@ struct DestinationHorCard: View {
                 }
                 
                 if noButtons { Spacer(minLength: 0) }
-            }.frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.trailing, 20)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.trailing, 20)
         }
         .padding(10)
         .background(Color("bgCard2"))
@@ -87,16 +89,12 @@ struct DestinationHorCard: View {
     }
 }
 
-
 #Preview {
     DestinationHorCard(data: Destination(
         name: "Kuta Beach",
         location: "Bali, Indonesia",
         rating: 4.8,
         image: "kuta",
-        description: "",
-    ),
-    showItineraryBtn: true,
-    showLike: true
-    )
+        description: ""
+    ), onAddItinerary: nil)
 }
