@@ -6,8 +6,12 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct ProfileView: View {
+    @EnvironmentObject var authVM: AuthViewModel
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         
         NavigationStack {
@@ -55,7 +59,7 @@ struct ProfileView: View {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text("Email").font(.custom("Poppins-Medium", size: 13)).foregroundStyle(Color("font"))
                                         
-                                    Text("jeromepolin@gmail.com").font(.custom("Poppins-Medium", size: 14))
+                                    Text(authVM.currentUser?.email ?? "-").font(.custom("Poppins-Medium", size: 14))
                                 }
                                 Spacer()
                             }.padding(.horizontal, 25).padding(.bottom, 20)
@@ -73,9 +77,21 @@ struct ProfileView: View {
                             }.padding(.horizontal, 25).padding(.bottom, 20)
                         }.clipShape(RoundedRectangle(cornerRadius: 20)).overlay(RoundedRectangle(cornerRadius: 20).stroke(Color("blue"), lineWidth: 1)).padding(.top, 50)
                             
-                        NavigationLink(destination: ContentView()) {
-                            Text("Log Out").font(.custom("Poppins-SemiBold", size: 18)).multilineTextAlignment(.center).padding().frame(maxWidth: 355).background(Color("blue")).foregroundStyle(.white).cornerRadius(16)
-                        }.padding(.top, 40).padding(.bottom, 100)
+                        Button {
+                            authVM.logout()
+                            dismiss()
+                        } label: {
+                            Text("Log Out")
+                                .font(.custom("Poppins-SemiBold", size: 18))
+                                .multilineTextAlignment(.center)
+                                .padding()
+                                .frame(maxWidth: 355)
+                                .background(Color("blue"))
+                                .foregroundStyle(.white)
+                                .cornerRadius(16)
+                        }
+                        .padding(.top, 40)
+                        .padding(.bottom, 100)
                             
                     }.padding(.horizontal, 25)/*.padding(.bottom, 100)*/
                 }
@@ -85,5 +101,5 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView()
+    ProfileView().environmentObject(AuthViewModel())
 }

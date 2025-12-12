@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2F3BC5362EEC81A500DC4850 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 2F3BC5352EEC81A500DC4850 /* FirebaseAuth */; };
+		2F3BC5382EEC81A500DC4850 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 2F3BC5372EEC81A500DC4850 /* FirebaseFirestore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		8E5454B42ED5FF2F00E18F6C /* PlayAway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlayAway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F3BC5362EEC81A500DC4850 /* FirebaseAuth in Frameworks */,
+				2F3BC5382EEC81A500DC4850 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +85,8 @@
 			);
 			name = PlayAway;
 			packageProductDependencies = (
+				2F3BC5352EEC81A500DC4850 /* FirebaseAuth */,
+				2F3BC5372EEC81A500DC4850 /* FirebaseFirestore */,
 			);
 			productName = PlayAway;
 			productReference = 8E5454B42ED5FF2F00E18F6C /* PlayAway.app */;
@@ -107,6 +116,9 @@
 			);
 			mainGroup = 8E5454AB2ED5FF2F00E18F6C;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				2F3BC5342EEC81A500DC4850 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8E5454B52ED5FF2F00E18F6C /* Products */;
 			projectDirPath = "";
@@ -351,6 +363,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2F3BC5342EEC81A500DC4850 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2F3BC5352EEC81A500DC4850 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F3BC5342EEC81A500DC4850 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		2F3BC5372EEC81A500DC4850 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F3BC5342EEC81A500DC4850 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8E5454AC2ED5FF2F00E18F6C /* Project object */;
 }
