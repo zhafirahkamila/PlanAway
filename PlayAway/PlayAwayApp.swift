@@ -6,12 +6,28 @@
 //
 
 import SwiftUI
+import Firebase
 
 @main
 struct PlayAwayApp: App {
+
+    @StateObject var authVM = AuthViewModel()
+    @StateObject var wishlistVM = WishlistViewModel()
+
+    init() {
+        FirebaseApp.configure()
+
+        #if DEBUG
+        FirestoreSeeder.seedDestinations()
+        #endif
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(authVM)
+                .environmentObject(wishlistVM)
         }
     }
 }
+

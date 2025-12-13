@@ -17,12 +17,36 @@ struct DestinationHorCard: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 25) {
-            Image(data.image)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 140, height: 130)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
             
+            // Image (URL-based)
+            AsyncImage(url: URL(string: data.image)) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                        .frame(width: 140, height: 130)
+                    
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFill()
+                    
+                case .failure:
+                    Image(systemName: "photo")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundStyle(.gray)
+                        .padding(20)
+                    
+                @unknown default:
+                    EmptyView()
+                }
+            }
+            .frame(width: 140, height: 130)
+            .background(Color.gray.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .clipped()
+            
+            // Info
             VStack(alignment: .leading, spacing: noButtons ? 2 : 4) {
                 if noButtons { Spacer(minLength: 0) }
                 
@@ -32,6 +56,7 @@ struct DestinationHorCard: View {
                 HStack {
                     Image(systemName: "mappin.and.ellipse")
                         .foregroundStyle(Color("midBlue"))
+                    
                     Text(data.location)
                         .font(.custom("Poppins-Medium", size: 12))
                         .foregroundStyle(.midBlue)
@@ -40,9 +65,10 @@ struct DestinationHorCard: View {
                 HStack(spacing: 4) {
                     ForEach(0..<5) { i in
                         Image(systemName: i < Int(data.rating) ? "star.fill" : "star")
-                            .font(.custom("Poppins-Regular", size: 12))
+                            .font(.system(size: 12))
                             .foregroundStyle(.yellow)
                     }
+                    
                     Text(String(format: "%.1f", data.rating))
                         .font(.custom("Poppins-SemiBold", size: 12))
                         .foregroundStyle(Color("blue"))
@@ -64,6 +90,7 @@ struct DestinationHorCard: View {
                                     .clipShape(Capsule())
                             }
                         }
+                        
                         if showLike {
                             Circle()
                                 .fill(Color("background"))
@@ -89,12 +116,14 @@ struct DestinationHorCard: View {
     }
 }
 
+
 #Preview {
     DestinationHorCard(data: Destination(
         name: "Kuta Beach",
         location: "Bali, Indonesia",
         rating: 4.8,
-        image: "kuta",
-        description: ""
+        image: "https://www.balisurfingcamp.com/wp-content/uploads/2024/07/Pantai-Kuta.jpg",
+        description: "",
+        category: ["popular"]
     ), onAddItinerary: nil)
 }
