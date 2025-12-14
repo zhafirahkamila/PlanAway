@@ -39,7 +39,7 @@ struct MainTabView: View {
     @State private var tabShapePosition: CGPoint = .zero
 
     // Penyimpanan destinasi yang dikirim dari WishlistView
-    @State private var selectedDestination: String = "Kuta Beach"
+    @State private var selectedDestination: String = "no destination"
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -51,8 +51,8 @@ struct MainTabView: View {
                     HomeView()
 
                 case .wishlist:
-                    WishlistView(onSelectDestination: { destination in
-                        selectedDestination = destination
+                    WishlistView(onAddItinerary: { destinationName in
+                        selectedDestination = destinationName
                         activeTab = .itinerary
                     })
 

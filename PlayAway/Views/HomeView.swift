@@ -14,11 +14,8 @@ struct HomeView: View {
 //    @Namespace private var animation
 //    @State private var tabShapePosition: CGPoint = .zero
     
-    let popular: [Destination] = [
-        Destination(name: "Kuta Beach", location: "Bali, Indonesia", rating: 4.8, image: "kuta", description: "Kuta Beach is one of Bali’s most iconic coastlines, known for its soft sand, steady waves, and beautiful sunsets. The lively area around it offers cafés, shops, and entertainment, making it a perfect spot for both relaxation and adventure."),
-        Destination(name: "Bromo Mountain", location: "Jawa Timur, Indonesia", rating: 4.0, image: "bromo", description: "Mount Bromo is an iconic volcano in East Java, renowned for its breathtaking sunrise views overlooking a vast sea of sand. Its active crater, cool mountain air, and dramatic landscape offer a truly unforgettable adventure for nature lovers and photographers alike."),
-        Destination(name: "Candi Prambanan", location: "Yogyakarta, Indonesia", rating: 4.5, image: "prambanan", description: "Prambanan Temple is the largest Hindu temple complex in Indonesia and a UNESCO World Heritage Site. Its towering architecture and intricate stone carvings depict the stories of the Ramayana, creating a majestic and timeless cultural experience—especially beautiful at sunset or during the Ramayana Ballet performance at night.")
-    ]
+    @StateObject private var viewModel = DestinationViewModel()
+
     
     var body: some View {
         NavigationStack {
@@ -69,7 +66,7 @@ struct HomeView: View {
                             }
                             
                             // MARK: HEADER TITLE
-                            Text("Hey, Jerome! Tell us\nwhere you want to go?")
+                            Text("Hey, there! Tell us\nwhere you want to go?")
                                 .font(.custom(
                                     "Poppins-Medium",
                                     size: min(geo.size.width * 0.045, 30)
@@ -113,7 +110,7 @@ struct HomeView: View {
                                 
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 10) {
-                                        ForEach(popular) { item in
+                                        ForEach(viewModel.popular) { item in
                                             NavigationLink(destination: DetailView(data: item)){
                                                 DestinationVerCard(data: item)
                                             }
@@ -138,7 +135,7 @@ struct HomeView: View {
                                 
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     VStack(spacing: 10) {
-                                        ForEach(popular) { item in
+                                        ForEach(viewModel.recommendation) { item in
                                             NavigationLink(destination: DetailView(data: item)){
                                                 DestinationHorCard(
                                                     data: item,
@@ -164,6 +161,8 @@ struct HomeView: View {
                 }
                 .ignoresSafeArea(edges: .bottom)
             }
+        }.onAppear {
+            viewModel.fetchDestinations()
         }
     }
     
